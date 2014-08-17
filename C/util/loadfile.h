@@ -1,0 +1,1 @@
+extern char * loadFile(const char *filename);
