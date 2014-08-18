@@ -70,6 +70,13 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
   size_t primaryLength = strlen(primary);
   size_t secondaryLength = strlen(secondary);
 
+  // A maximum possible length of a common subsequence is identified.
+  size_t upperLimit = primaryLength < secondaryLength ?
+      primaryLength : secondaryLength;
+
+  if (!upperLimit)
+    return calloc(1, sizeof(char));  // Early out if either string is empty.
+
   // An array is used to form a series of singly-linked lists which connect
   // appearances of characters in the secondary string. This effectively forms a
   // map between characters and an ordered list of character appearance indices,
@@ -99,10 +106,6 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
     characterMap[chr] = secondaryIndex;
   }
 
-  // A maximum possible length of a common subsequence is identified.
-  size_t upperLimit = primaryLength < secondaryLength ?
-      primaryLength : secondaryLength;
-
   // A subsequence is stored of every length 1.. n where s[n] is the sequence of
   // length n, from the set of all sequences of length n where final element
   // pair has the minimal index in the secondary string.
@@ -114,7 +117,6 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
   // parent node represents the previous character appearance pair in the
   // subsequence. This allows sequences to be duplicated and extended at the
   // cost of a single extra node, not the entire length of the sequence.
-  assert(upperLimit > 0);
   Node **sequences = calloc(upperLimit, sizeof(Node *));
 
   // A list of pools of slots is used for the nodes on the dynamically-generated
@@ -148,7 +150,7 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
     // characters from s[n+1] would have a lower final index.
 
     // Calculate the remaining characters in the primary string.
-    int remainingCharacters = (int) primaryLength - primaryIndex;
+    int remainingCharacters = primaryLength - primaryIndex;
 
     // The length of the sequence currently under consideration for replacement.
     // This is actually in index to the sequence table so 0 == a sequence of
@@ -189,7 +191,8 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
 
     // Pass over all characters in the secondary string that match the character
     // under consideration in the primary string.
-    int secondaryIndex = characterMap[(unsigned char)primary[primaryIndex]];
+    unsigned char chr = primary[primaryIndex];
+    int secondaryIndex = characterMap[chr];
     // -1 is used to indicate the end of the list.
     while (secondaryIndex != -1) {
       // Step up through the sequence lengths until a record length is reached,
