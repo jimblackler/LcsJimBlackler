@@ -1,10 +1,7 @@
 #ifdef WIN32
-
 #include <windows.h>
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
-#include <malloc.h>
-
 #endif  // WIN32
 
 #include <assert.h>
