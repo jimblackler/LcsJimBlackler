@@ -1,3 +1,4 @@
 https://github.com/soarpenguin/code-sample-c/blob/master/leetcode/lcs.c
 
-Slightly adapted to remove 'main' method and make the parameters const.
+Slightly adapted to remove 'main' method, fix a memory leak and make the
+parameters const.
