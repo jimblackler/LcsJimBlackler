@@ -110,7 +110,7 @@ destroyLCS()
   int i = 0;
 
   if(lcs != NULL) {
-    for(i = 0; i < lcs->m; ++i) {
+    for(i = 0; i <= lcs->m; ++i) {
       free(lcs->c[i]);
       free(lcs->b[i]);
     }
@@ -124,7 +124,7 @@ destroyLCS()
 }
 
 char*
-LCS_SoarPenguin(const char *X, const char *Y)
+LCS_SoarPenguin(const unsigned char *X, const unsigned char *Y)
 {
   initLCS(X, Y);
   LCSDP();

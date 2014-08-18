@@ -1,6 +1,5 @@
 #include <string.h>
 #include <stdlib.h>
-#include <sys/param.h>
 
 /**
 * Longest Common Subsequence algorithm designed and written by Jim Blackler
@@ -66,7 +65,8 @@ static void recycleSequence(Node *node, Node **lastRecycledNode) {
 }
 
 // Return the Longest Common Subsequence of the two supplied strings.
-char *LCS_Blackler(const char *primary, const char *secondary) {
+char *LCS_Blackler(const unsigned char *primary,
+      const unsigned char *secondary) {
   size_t primaryLength = strlen(primary);
   size_t secondaryLength = strlen(secondary);
 
@@ -93,14 +93,15 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
        secondaryIndex >= 0; secondaryIndex--) {
     // Insert this character appearance in the singly linked list where the
     // |characterMap| stores the head of each list.
-    char chr = secondary[secondaryIndex];
+    unsigned char chr = secondary[secondaryIndex];
     linkedChars[secondaryIndex] = characterMap[chr];
     // Record the new head element.
     characterMap[chr] = secondaryIndex;
   }
 
   // A maximum possible length of a common subsequence is identified.
-  size_t upperLimit = MIN(primaryLength, secondaryLength);
+  size_t upperLimit = primaryLength < secondaryLength ?
+      primaryLength : secondaryLength;
 
   // A subsequence is stored of every length 1.. n where s[n] is the sequence of
   // length n, from the set of all sequences of length n where final element

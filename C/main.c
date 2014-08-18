@@ -1,21 +1,37 @@
-#include <stdio.h>
+#ifdef WIN32
+#include <windows.h>
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+#else
 #include <sys/time.h>
-#include <string.h>
+#endif
+
 #include <assert.h>
+#include <malloc.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include "algorithm/lcs_blackler.h"
-#include "thirdParty_NeilJones/lcs.h"
-#include "thirdParty_SoarPenguin/lcs.h"
+#include "thirdparty/lcs_neiljones.h"
+#include "thirdparty/lcs_soarpenguin.h"
 #include "util/loadfile.h"
 
 static long long int getMilliseconds() {
+#ifdef WIN32
+  LARGE_INTEGER time;
+  QueryPerformanceCounter(&time);
+  return time.QuadPart;
+#else
   struct timeval time;
   gettimeofday(&time, 0);
   long long before = 1000000 * time.tv_sec + time.tv_usec;
   return before;
+#endif
 }
 
-static size_t process(char *name, char *(*function)(const char *, const char *),
+static size_t process(char *name,
+    char *(*function)(const unsigned char *, const unsigned char *),
     const char *a, const char *b) {
   long long before = getMilliseconds();
   char *lcs = function(a, b);
@@ -32,14 +48,15 @@ static char *randomString(int range, size_t size) {
   char *text = malloc(size + 1);
   char *ptr = text;
   while (size) {
-    *ptr++ = (char) (' ' + random() % range);
+    *ptr++ = (char) (' ' + rand() % range);
     size--;
   }
   *ptr = 0;
   return text;
 }
 
-static void testAll(const char *a, const char *b) {
+static void testAll(const unsigned char *a,
+    const unsigned char *b) {
   size_t result = process("NeilJones", LCS_NeilJones, a, b);
   size_t result2 = process("Blackler", LCS_Blackler, a, b);
   assert(result == result2);
@@ -49,8 +66,8 @@ static void testAll(const char *a, const char *b) {
 }
 
 static void fileTest() {
-  char *a = loadFile("bible1.txt");
-  char *b = loadFile("bible2.txt");
+  char *a = loadFile("data/bible1.txt");
+  char *b = loadFile("data/bible2.txt");
   testAll(a, b);
   free(a);
   free(b);
@@ -63,9 +80,10 @@ static void phraseTest() {
 }
 
 static void randomTest() {
-  for (int count = 0; count != 500; count++) {
-    char *a = randomString(random() % 96 + 1, (size_t) (random() % 50000 + 1));
-    char *b = randomString(random() % 96 + 1, (size_t) (random() % 50000 + 1));
+  int count;
+  for (count = 0; count != 20; count++) {
+    char *a = randomString(rand() % 96 + 1, (size_t) (rand() % 50000 + 1));
+    char *b = randomString(rand() % 96 + 1, (size_t) (rand() % 50000 + 1));
     testAll(a, b);
     free(a);
     free(b);
@@ -76,5 +94,8 @@ int main(int argc, const char *argv[]) {
   phraseTest();
   fileTest();
   randomTest();
+#ifdef WIN32
+  _CrtDumpMemoryLeaks();
+#endif
   return 0;
 }
