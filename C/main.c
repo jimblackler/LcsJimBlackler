@@ -82,6 +82,6 @@ int main(int argc, const char *argv[]) {
   randomTest();
 #ifdef WIN32
   _CrtDumpMemoryLeaks();
-#endif
+#endif  // WIN32
   return 0;
 }
