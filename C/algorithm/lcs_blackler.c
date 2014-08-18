@@ -149,9 +149,6 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
     // could not be the sequence with the lowest final index, as any 'n'
     // characters from s[n+1] would have a lower final index.
 
-    // Calculate the remaining characters in the primary string.
-    int remainingCharacters = primaryLength - primaryIndex;
-
     // The length of the sequence currently under consideration for replacement.
     // This is actually in index to the sequence table so 0 == a sequence of
     // length 1.
@@ -163,6 +160,9 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
     // secondary string) this sequence will be extended by one character and any
     // current sequence of this length replaced.
     Node *baseSequence;
+
+    // Calculate the remaining characters in the primary string.
+    int remainingCharacters = primaryLength - primaryIndex;
 
     // If fewer characters remain than exist in the longest known sequence, the
     // shorter sequences need no longer be considered as they cannot possibly be
