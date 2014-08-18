@@ -96,7 +96,7 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
     unsigned char chr = secondary[secondaryIndex];
     linkedChars[secondaryIndex] = characterMap[chr];
     // Record the new head element.
-    characterMap[(unsigned)chr] = secondaryIndex;
+    characterMap[chr] = secondaryIndex;
   }
 
   // A maximum possible length of a common subsequence is identified.
@@ -189,7 +189,7 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
 
     // Pass over all characters in the secondary string that match the character
     // under consideration in the primary string.
-    int secondaryIndex = characterMap[(unsigned)primary[primaryIndex]];
+    int secondaryIndex = characterMap[(unsigned char)primary[primaryIndex]];
     // -1 is used to indicate the end of the list.
     while (secondaryIndex != -1) {
       // Step up through the sequence lengths until a record length is reached,
