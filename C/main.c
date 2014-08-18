@@ -1,11 +1,11 @@
 #ifdef WIN32
+
 #include <windows.h>
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 #include <malloc.h>
-#else
-#include <sys/time.h>
-#endif
+
+#endif  // WIN32
 
 #include <assert.h>
 #include <stdio.h>
@@ -16,19 +16,7 @@
 #include "thirdparty/lcs_neiljones.h"
 #include "thirdparty/lcs_soarpenguin.h"
 #include "util/loadfile.h"
-
-static long long int getMilliseconds() {
-#ifdef WIN32
-  LARGE_INTEGER time;
-  QueryPerformanceCounter(&time);
-  return time.QuadPart;
-#else
-  struct timeval time;
-  gettimeofday(&time, 0);
-  long long before = 1000000 * time.tv_sec + time.tv_usec;
-  return before;
-#endif
-}
+#include "util/timing.h"
 
 static size_t process(char *name, char *(*function)(const char *, const char *),
     const char *a, const char *b) {
