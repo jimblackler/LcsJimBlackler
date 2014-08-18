@@ -43,8 +43,8 @@ static char *randomString(int range, size_t size) {
 }
 
 static void testAll(const char *a, const char *b) {
-  size_t result = process("NeilJones", LCS_NeilJones, a, b);
   size_t result2 = process("Blackler", LCS_Blackler, a, b);
+  size_t result = process("NeilJones", LCS_NeilJones, a, b);
   assert(result == result2);
   size_t result3 = process("SoarPenguin", LCS_SoarPenguin, a, b);
   assert(result == result3);
@@ -67,9 +67,9 @@ static void phraseTest() {
 
 static void randomTest() {
   int count;
-  for (count = 0; count != 20; count++) {
-    char *a = randomString(rand() % 96 + 1, (size_t) (rand() % 50000 + 1));
-    char *b = randomString(rand() % 96 + 1, (size_t) (rand() % 50000 + 1));
+  for (count = 0; count != 5; count++) {
+    char *a = randomString(rand() % 96 + 1, (size_t) (rand() % 35000 + 1));
+    char *b = randomString(rand() % 96 + 1, (size_t) (rand() % 35000 + 1));
     testAll(a, b);
     free(a);
     free(b);
@@ -77,6 +77,7 @@ static void randomTest() {
 }
 
 int main(int argc, const char *argv[]) {
+  srand(1);
   phraseTest();
   fileTest();
   randomTest();
