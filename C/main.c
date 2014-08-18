@@ -2,12 +2,12 @@
 #include <windows.h>
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
+#include <malloc.h>
 #else
 #include <sys/time.h>
 #endif
 
 #include <assert.h>
-#include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -30,8 +30,7 @@ static long long int getMilliseconds() {
 #endif
 }
 
-static size_t process(char *name,
-    char *(*function)(const unsigned char *, const unsigned char *),
+static size_t process(char *name, char *(*function)(const char *, const char *),
     const char *a, const char *b) {
   long long before = getMilliseconds();
   char *lcs = function(a, b);
@@ -55,8 +54,7 @@ static char *randomString(int range, size_t size) {
   return text;
 }
 
-static void testAll(const unsigned char *a,
-    const unsigned char *b) {
+static void testAll(const char *a, const char *b) {
   size_t result = process("NeilJones", LCS_NeilJones, a, b);
   size_t result2 = process("Blackler", LCS_Blackler, a, b);
   assert(result == result2);

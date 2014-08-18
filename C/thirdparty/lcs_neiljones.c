@@ -33,7 +33,7 @@
  * Note that this will allocate space for the result, and you will need 
  * to free it yourself to avoid a memory leak. 
  */
-char* LCS_NeilJones(const unsigned char* a, const unsigned char* b) {
+char* LCS_NeilJones(const char* a, const char* b) {
   int n = strlen(a);
   int m = strlen(b);
 

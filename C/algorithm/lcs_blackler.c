@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -65,8 +66,7 @@ static void recycleSequence(Node *node, Node **lastRecycledNode) {
 }
 
 // Return the Longest Common Subsequence of the two supplied strings.
-char *LCS_Blackler(const unsigned char *primary,
-      const unsigned char *secondary) {
+char *LCS_Blackler(const char *primary, const char *secondary) {
   size_t primaryLength = strlen(primary);
   size_t secondaryLength = strlen(secondary);
 
@@ -89,14 +89,14 @@ char *LCS_Blackler(const unsigned char *primary,
   // Build the singly-linked list of character appearances in the secondary
   // string. The string is traversed in reverse order so that at the end the
   // |characterMap| maps the first appearance of each character.
-  for (int secondaryIndex = secondaryLength - 1;
+  for (int secondaryIndex = (int) secondaryLength - 1;
        secondaryIndex >= 0; secondaryIndex--) {
     // Insert this character appearance in the singly linked list where the
     // |characterMap| stores the head of each list.
     unsigned char chr = secondary[secondaryIndex];
     linkedChars[secondaryIndex] = characterMap[chr];
     // Record the new head element.
-    characterMap[chr] = secondaryIndex;
+    characterMap[(unsigned)chr] = secondaryIndex;
   }
 
   // A maximum possible length of a common subsequence is identified.
@@ -114,6 +114,7 @@ char *LCS_Blackler(const unsigned char *primary,
   // parent node represents the previous character appearance pair in the
   // subsequence. This allows sequences to be duplicated and extended at the
   // cost of a single extra node, not the entire length of the sequence.
+  assert(upperLimit > 0);
   Node **sequences = calloc(upperLimit, sizeof(Node *));
 
   // A list of pools of slots is used for the nodes on the dynamically-generated
@@ -147,7 +148,7 @@ char *LCS_Blackler(const unsigned char *primary,
     // characters from s[n+1] would have a lower final index.
 
     // Calculate the remaining characters in the primary string.
-    int remainingCharacters = primaryLength - primaryIndex;
+    int remainingCharacters = (int) primaryLength - primaryIndex;
 
     // The length of the sequence currently under consideration for replacement.
     // This is actually in index to the sequence table so 0 == a sequence of
@@ -188,7 +189,7 @@ char *LCS_Blackler(const unsigned char *primary,
 
     // Pass over all characters in the secondary string that match the character
     // under consideration in the primary string.
-    int secondaryIndex = characterMap[primary[primaryIndex]];
+    int secondaryIndex = characterMap[(unsigned)primary[primaryIndex]];
     // -1 is used to indicate the end of the list.
     while (secondaryIndex != -1) {
       // Step up through the sequence lengths until a record length is reached,
@@ -278,6 +279,7 @@ char *LCS_Blackler(const unsigned char *primary,
   char *writePointer = result + longestSequence;
   *writePointer-- = 0;  // Write the null terminator.
   while (writePointer >= result) {
+    assert(node);
     // Copy the character from the secondary string.
     *writePointer-- = secondary[node->secondaryIndex];
     // Walk the tree to move to the previous character.
