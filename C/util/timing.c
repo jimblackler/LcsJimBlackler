@@ -4,7 +4,7 @@
 #include <sys/time.h>
 #endif  // WIN32
 
-long long int getMilliseconds() {
+long long int getMicroseconds() {
 #ifdef WIN32
   LARGE_INTEGER time;
   QueryPerformanceCounter(&time);

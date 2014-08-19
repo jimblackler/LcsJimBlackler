@@ -20,9 +20,9 @@
 
 static size_t process(char *name, char *(*function)(const char *, const char *),
     const char *a, const char *b) {
-  long long before = getMilliseconds();
+  long long before = getMicroseconds();
   char *lcs = function(a, b);
-  long long after = getMilliseconds();
+  long long after = getMicroseconds();
   if (strlen(lcs) < 200)
     printf("%s\n", lcs);
   printf("%s: %lld, %lu\n", name, after - before, strlen(lcs));

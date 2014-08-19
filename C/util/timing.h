@@ -1,3 +1,3 @@
-// Return the number of milliseconds since some fixed point. For performance
+// Return the number of microseconds since some fixed point. For performance
 // testing.
-long long int getMilliseconds();
+long long int getMicroseconds();
