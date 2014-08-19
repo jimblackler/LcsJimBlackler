@@ -1,4 +1,4 @@
-#include "issubstring.h"
+#include <stdbool.h>
 
 bool isSubstring(const char *candidateSubstring, const char *largerString) {
   // Iterate over both strings in parallel.
