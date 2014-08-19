@@ -1,5 +1,0 @@
-Copyright (C) 2005 Neil Jones.
-http://bix.ucsd.edu/bioalgorithms/downloads/code/LCS.c
-
-Slightly adapted to remove 'main' method, fix a bug (sizeof(int) not int*), and
-make the parameters const.
