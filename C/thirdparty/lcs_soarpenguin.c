@@ -48,8 +48,8 @@ initLCS(const char *X, const char *Y)
   }
 
   for(i = 0; i <= lcs->m; ++i) {
-    lcs->b[i] = (int *)malloc((lcs->n + 1) * sizeof(int *));
-    lcs->c[i] = (int *)malloc((lcs->n + 1) * sizeof(int *));
+    lcs->b[i] = (int *)malloc((lcs->n + 1) * sizeof(int));
+    lcs->c[i] = (int *)malloc((lcs->n + 1) * sizeof(int));
   }
 
   for(i = 0; i <= lcs->m; ++i) {
