@@ -17,6 +17,7 @@
 #include "thirdparty/lcs_soarpenguin.h"
 #include "util/loadfile.h"
 #include "util/timing.h"
+#import "benchmark.h"
 
 static size_t process(char *name, char *(*function)(const char *, const char *),
     const char *a, const char *b) {
@@ -66,6 +67,7 @@ static void phraseTest() {
 }
 
 static void randomTest() {
+  srand(1);
   int count;
   for (count = 0; count != 5; count++) {
     char *a = randomString(rand() % 96 + 1, (size_t) (rand() % 35000 + 1));
@@ -77,10 +79,13 @@ static void randomTest() {
 }
 
 int main(int argc, const char *argv[]) {
-  srand(1);
-  phraseTest();
-  fileTest();
-  randomTest();
+  if (1) {
+    benchmark();
+  } else {
+    phraseTest();
+    fileTest();
+    randomTest();
+  }
 #ifdef WIN32
   _CrtDumpMemoryLeaks();
 #endif  // WIN32
