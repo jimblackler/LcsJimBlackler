@@ -55,8 +55,8 @@ char* LCS_NeilJones(const char* a, const char* b) {
   S = (int **)malloc( (n+1) * sizeof(int*) );
   R = (int **)malloc( (n+1) * sizeof(int*) );
   for(ii = 0; ii <= n; ++ii) {
-    S[ii] = (int*) malloc( (m+1) * sizeof(int*) );
-    R[ii] = (int*) malloc( (m+1) * sizeof(int*) );
+    S[ii] = (int*) malloc( (m+1) * sizeof(int) );
+    R[ii] = (int*) malloc( (m+1) * sizeof(int) );
   }
 
   /* It is important to use <=, not <.  The next two for-loops are initialization */
