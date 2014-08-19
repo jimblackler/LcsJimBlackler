@@ -17,7 +17,7 @@ typedef struct Sample {
   int methodNumber;  // Index of the method.
   size_t size;  // Input data size in bytes.
 
-  long long duration;  // Time duration.
+  long long measure;  // Measure, either time duration or memory used.
   size_t strlen;  // Length of the LCS returned.
   bool valid;  // If the LCS was actually a substring of the inputs.
 
@@ -54,12 +54,22 @@ static Sample *doSample(size_t size,
 
   printf("%s (%lu) .. ", methodName, size);  // Log to console.
 
+#ifdef MEMORY_PROFILE
+  long long before = memoryCount;  // Get memory before.
+#else
   long long before = getMicroseconds();  // Get time before.
-  char *result = method(a, b);  // Perform the method.
-  long long after = getMicroseconds();  // Get time afterwards.
+#endif  // MEMORY_PROFILE
 
-  // Record the timing data.
-  sample->duration = after - before;
+  char *result = method(a, b);  // Perform the method.
+
+#ifdef MEMORY_PROFILE
+  long long after = memoryCount;  // Get memory afterwards.
+#else
+  long long after = getMicroseconds();  // Get time afterwards.
+#endif  // MEMORY_PROFILE
+
+  // Record the timing/memory data.
+  sample->measure = after - before;
   // Check the result was valid.
   sample->valid = isSubstring(result, a) && isSubstring(result, b);
   sample->strlen = strlen(result);  // Record the length of the result.
@@ -68,7 +78,7 @@ static Sample *doSample(size_t size,
   // Log to the console.
   if (!sample->valid)
     printf("*INVALID* ");
-  printf("%qi\n", sample->duration);
+  printf("%qi\n", sample->measure);
 
   return sample;
 }
@@ -76,6 +86,14 @@ static Sample *doSample(size_t size,
 // Perform a benchmark test of increasing data size on all LCS methods
 // and output the results to a CSV file.
 void benchmark() {
+
+#ifdef MEMORY_PROFILE
+    int units = 1;
+    int maxMeasure = 1024 * 1024 * 4;
+#else
+  int units = 1000000;
+  int maxMeasure = units * 0.5;
+#endif  // MEMORY_PROFILE
 
   // Data about the methods and names.
   size_t numberMethods = 4;
@@ -100,37 +118,38 @@ void benchmark() {
 
   // Progressively sample methods; the method selected is the one that completed
   // in the shortest time on the previous occasion it was run (whatever the
-  // sample size). This gives faster feedback during experiments because
-  // slow-running algorithms do not dominate the testing time.
+  // sample size), or in the case of memory profile, least memory used. This
+  // gives faster feedback during experiments because heavy algorithms do not
+  // dominate the testing time.
   while (true) {
 
-    // Find the method with the fastest most recent sample.
+    // Find the method with the fastest/smallest most recent sample.
     // O(n^2) time but has negligible impact on program running time.
-    Sample *fastestMostRecentSample = NULL;
+    Sample *smallestMostRecentSample = NULL;
     for (int methodNumber = 0; methodNumber != numberMethods; methodNumber++) {
       // Find most recent sample.
       Sample *sample = firstSample[methodNumber];
       while (sample->next)
         sample = sample->next;
-      if (!fastestMostRecentSample ||
-          sample->duration < fastestMostRecentSample->duration) {
-        fastestMostRecentSample = sample;
+      if (!smallestMostRecentSample ||
+          sample->measure < smallestMostRecentSample->measure) {
+        smallestMostRecentSample = sample;
       }
     }
 
     // If the fastest method was over the cap time, stop.
-    if (fastestMostRecentSample->duration >= 1000000 * 0.5)
+    if (smallestMostRecentSample->measure >= maxMeasure)
       break;
 
     // Make a new sample with a size of a percentage increase from the previous.
     Sample *sample =
-        doSample((size_t) (fastestMostRecentSample->size * 1.04 + 1),
-            fastestMostRecentSample->methodNumber,
-            methods[fastestMostRecentSample->methodNumber],
-            methodNames[fastestMostRecentSample->methodNumber]);
+        doSample((size_t) (smallestMostRecentSample->size * 1.04 + 1),
+            smallestMostRecentSample->methodNumber,
+            methods[smallestMostRecentSample->methodNumber],
+            methodNames[smallestMostRecentSample->methodNumber]);
 
     // Link the new sample to the previous.
-    fastestMostRecentSample->next = sample;
+    smallestMostRecentSample->next = sample;
   }
 
   // Write the results to a CSV file for import into a chart package.
@@ -186,7 +205,7 @@ void benchmark() {
           fprintf(outFile, "NOT SS");
         else if (sample->strlen < bestLCS)
           fprintf(outFile, "NOT LCS");
-        else fprintf(outFile, "%f", (float) sample->duration / 1000000);
+        else fprintf(outFile, "%f", (float) sample->measure / units);
       }
     }
 
