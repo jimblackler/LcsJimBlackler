@@ -5,10 +5,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "lcs_rogerzhang.h"
-#include "lcs_blackler.h"
-#include "lcs_neiljones.h"
-#include "lcs_soarpenguin.h"
+#include "algorithm/lcs_blackler.h"
+#include "thirdparty/lcs_rogerzhang.h"
+#include "thirdparty/lcs_neiljones.h"
+#include "thirdparty/lcs_soarpenguin.h"
 #include "util/issubstring.h"
 #include "util/timing.h"
 
