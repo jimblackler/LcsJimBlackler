@@ -5,12 +5,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#import "issubstring.h"
-#import "lcs_rogerzhang.h"
+#include "lcs_rogerzhang.h"
 #include "lcs_blackler.h"
 #include "lcs_neiljones.h"
 #include "lcs_soarpenguin.h"
-#include "timing.h"
+#include "util/issubstring.h"
+#include "util/timing.h"
 
 // Information about each sample (individual benchmark run).
 typedef struct Sample {
