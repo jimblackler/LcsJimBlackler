@@ -29,10 +29,11 @@ typedef struct NodeSlotPool {
 // |activePool|.
 static void newNodePool(NodeSlotPool **activePool) {
   NodeSlotPool *newPool = malloc(sizeof(NodeSlotPool));
+  // Pool size increases exponentially.
   if (*activePool)
-    newPool->size = (*activePool)->size * 3;  // Pools treble in size each time.
+    newPool->size = (*activePool)->size * 1.5;
   else
-    newPool->size = 1000;  // First pool size.
+    newPool->size = 100;  // First pool size.
   newPool->firstSlot = malloc(sizeof(Node) * newPool->size);
   newPool->nextSlot = newPool->firstSlot;
   newPool->previousPool = *activePool;  // Link the previous pool.
