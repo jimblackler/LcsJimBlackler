@@ -4,7 +4,7 @@
 
 /**
 * Longest Common Subsequence algorithm designed and written by Jim Blackler
-* August 2014.  jimblackler@gmail.com
+* August 2014.  (c) jimblackler@gmail.com
 */
 
 // A node representing a matching pair of characters across strings in the tree
