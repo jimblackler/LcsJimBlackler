@@ -8,8 +8,9 @@
 */
 
 // A node representing a matching pair of characters across strings in the tree
-// of subsequences. Note that the primary index (index of the character pair in
-// the primary string) is not stored, simply because it is never required.
+// of subsequence characters (similar to a prefix tree or trie). Note that the
+// primary index (index of the character pair in the primary string) is not
+// stored, simply because it is never required.
 typedef struct Node {
   int secondaryIndex;  // Index of the character in the secondary string.
   struct Node *parent;  // Previous pair in the subsequence.
