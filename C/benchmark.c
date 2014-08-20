@@ -6,8 +6,9 @@
 #include <string.h>
 
 #include "algorithm/lcs_blackler.h"
-#include "thirdparty/lcs_rogerzhang.h"
+#include "thirdparty/lcs_hirschberg.h"
 #include "thirdparty/lcs_neiljones.h"
+#include "thirdparty/lcs_rogerzhang.h"
 #include "thirdparty/lcs_soarpenguin.h"
 #include "util/issubstring.h"
 #include "util/timing.h"
@@ -92,15 +93,15 @@ void benchmark() {
     int maxMeasure = 1024 * 1024 * 4;
 #else
   int units = 1000000;
-  int maxMeasure = units * 0.5;
+  int maxMeasure = units * .8;
 #endif  // MEMORY_PROFILE
 
   // Data about the methods and names.
-  size_t numberMethods = 4;
+  size_t numberMethods = 5;
   const char *methodNames[] =
-      {"Blackler", "NeilJones", "SoarPenguin", "RogerZhang"};
+      {"Blackler", "NeilJones", "SoarPenguin", "RogerZhang", "Hirschberg"};
   char *(*methods[])(const char *, const char *) =
-      {LCS_Blackler, LCS_NeilJones, LCS_SoarPenguin, LCS_RogerZhang};
+      {LCS_Blackler, LCS_NeilJones, LCS_SoarPenguin, LCS_RogerZhang, LCS_Hirschberg};
 
   // Tables of first samples for each method.
   Sample **firstSample = calloc(sizeof(Sample *), numberMethods);
@@ -109,7 +110,7 @@ void benchmark() {
   for (int methodNumber = 0; methodNumber != numberMethods;
        methodNumber++) {
     // First sample is one single byte.
-    Sample *sample = doSample(1, methodNumber, methods[methodNumber],
+    Sample *sample = doSample(8, methodNumber, methods[methodNumber],
         methodNames[methodNumber]);
 
     // Record the data.
