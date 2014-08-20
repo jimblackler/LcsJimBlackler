@@ -1,6 +1,6 @@
 /**
 * Longest Common Subsequence algorithm designed and written by Jim Blackler
-* August 2014.  jimblackler@gmail.com
+* August 2014.  (c) jimblackler@gmail.com
 *
 * The LCS is built by passing over one of the strings while collecting
 * subsequences of paired character appearances in both strings.
