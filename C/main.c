@@ -14,7 +14,7 @@
 #include "thirdparty/lcs_soarpenguin.h"
 #include "util/loadfile.h"
 #include "util/timing.h"
-#import "benchmark.h"
+#include "benchmark.h"
 
 static size_t process(char *name, char *(*function)(const char *, const char *),
     const char *a, const char *b) {
