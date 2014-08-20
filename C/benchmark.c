@@ -74,12 +74,14 @@ static Sample *doSample(size_t size,
   // Check the result was valid.
   sample->valid = isSubstring(result, a) && isSubstring(result, b);
   sample->strlen = strlen(result);  // Record the length of the result.
+  free(a);
+  free(b);
   free(result);  // Free the memory.
 
   // Log to the console.
   if (!sample->valid)
     printf("*INVALID* ");
-  printf("%qi\n", sample->measure);
+  printf("%lld\n", sample->measure);
 
   return sample;
 }
