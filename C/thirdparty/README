@@ -25,3 +25,9 @@ Created on 2005-01-22 by
 Roger Zhang (rogerz@cs.dal.ca)
 
 Slightly to make the parameters const and make the method name package unique.
+
+
+lcs_hirschberg.c, .h
+
+Adapted from
+https://code.google.com/p/algorithm800/source/browse/trunk/src/Hirschberg.java
