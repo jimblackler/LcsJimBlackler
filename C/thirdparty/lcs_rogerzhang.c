@@ -58,7 +58,9 @@ char *LCS_RogerZhang(const char *s, const char *t)
    }
 
    if (!(i = a[n][m])) {
-      return calloc(sizeof(char), 1); /* no common sub-sequence */
+     free(a[0]);
+     free(a);
+     return calloc(sizeof(char), 1); /* no common sub-sequence */
    }
 
    if (!(result = (char*)malloc(i + 1)) || (result[i] = '\0')) {
