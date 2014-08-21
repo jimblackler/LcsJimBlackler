@@ -18,7 +18,7 @@ typedef struct Node {
 } Node;
 
 // A list of pools of slots for nodes is used to allow memory allocation in
-// batched chunks.
+// batches.
 typedef struct NodeSlotPool {
   struct NodeSlotPool *previousPool;
   int size;
@@ -227,7 +227,7 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
 
         // Set up the leaf node of the newly created or extended sequence.
         newNode->secondaryIndex = secondaryIndex;
-        newNode->parent = baseSequence;  // Previous character.
+        newNode->parent = baseSequence;  // Appended subsequence.
         newNode->outgoing = 0;
 
         // Update the number of outgoing links from any base sequence.
@@ -277,14 +277,13 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
   Node *node = sequences[longestSequence - 1];
 
   // Make space for the string and the null terminator.
-  char *result = malloc((size_t) longestSequence + 1);
+  char *result = malloc(longestSequence + 1);
 
   // As the sequence is represented by a leaf node in a tree representing the
   // final character, the string is built back-to-front.
   char *writePointer = result + longestSequence;
   *writePointer-- = 0;  // Write the null terminator.
   while (writePointer >= result) {
-    assert(node);
     // Copy the character from the secondary string.
     *writePointer-- = secondary[node->secondaryIndex];
     // Walk the tree to move to the previous character.
