@@ -6,6 +6,7 @@
 #include <string.h>
 
 #include "algorithm/lcs_blackler.h"
+#include "algorithm/lcs_blackler2.h"
 #include "thirdparty/lcs_hirschberg.h"
 #include "thirdparty/lcs_neiljones.h"
 #include "thirdparty/lcs_rogerzhang.h"
@@ -91,11 +92,11 @@ static Sample *doSample(size_t size,
 void benchmark() {
 
 #ifdef MEMORY_PROFILE
-    int units = 1;
-    int maxMeasure = 1024 * 1024 * 4;
+  int units = 1;
+  int maxMeasure = 1024 * 1024 * 5;
 #else
   int units = 1000000;
-  int maxMeasure = units * .8;
+  int maxMeasure = units * 5;
 #endif  // MEMORY_PROFILE
 
   // Data about the methods and names.
@@ -146,7 +147,7 @@ void benchmark() {
 
     // Make a new sample with a size of a percentage increase from the previous.
     Sample *sample =
-        doSample((size_t) (smallestMostRecentSample->size * 1.04 + 1),
+        doSample((size_t) (smallestMostRecentSample->size * 1.05 + 10),
             smallestMostRecentSample->methodNumber,
             methods[smallestMostRecentSample->methodNumber],
             methodNames[smallestMostRecentSample->methodNumber]);
