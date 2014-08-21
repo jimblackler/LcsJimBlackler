@@ -35,7 +35,7 @@ char *LCS_RogerZhang(const char *s, const char *t)
    int n = strlen(s), m = strlen(t), i, j, **a;
 
    if (!n || !m) { /* empty input string */
-      return "";
+      return calloc(sizeof(char), 1);
    }
 
    a = (int**)calloc(n + 1, sizeof(int*));
