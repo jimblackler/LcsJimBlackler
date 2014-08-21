@@ -6,8 +6,8 @@
 * subsequences of paired element (character) appearances in both strings.
 *
 * One subsequence is stored of every length from one to the maximum length
-* found so far. The subsequence selected for any given length is the one which
-* from all the possibilities the final paired character appearance has the
+* found so far. The subsequence selected for any given length is the one which -
+* from all the possibilities - the final paired character appearance has the
 * earliest appearance in the second string (thus maximizing the chance of being
 * extended again).
 *
@@ -24,7 +24,7 @@
 * previous character pair in the subsequence. This highly-compact format allows
 * sequences to be duplicated for extension in O(1) time and space. In
 * non-garbage collected languages a housekeeping algorithm recycles tree nodes
-* that are no longer in use.
+* that are no longer in use, in order to minimize the total memory used.
 *
 * The final character appearance pairs of all the subsequences 1 .. n will be
 * in ascending order of appearance in the second string. (If this were not the
@@ -42,6 +42,9 @@
 * considering for extension any subsequence that could never be extended to
 * form the longest-known subsequence because there are not enough characters
 * remaining to be processed in the primary string.
+*
+* The actual LCS is built in reverse in a final loop that writes the string
+* from characters it encounters in a walk from the leaf node to its root.
 */
 
 // Return the Longest Common Subsequence of the two supplied strings.
