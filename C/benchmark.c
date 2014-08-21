@@ -112,7 +112,7 @@ void benchmark() {
   for (int methodNumber = 0; methodNumber != numberMethods;
        methodNumber++) {
     // First sample is one single byte.
-    Sample *sample = doSample(8, methodNumber, methods[methodNumber],
+    Sample *sample = doSample(1, methodNumber, methods[methodNumber],
         methodNames[methodNumber]);
 
     // Record the data.
@@ -145,8 +145,28 @@ void benchmark() {
       break;
 
     // Make a new sample with a size of a percentage increase from the previous.
+    int previous = smallestMostRecentSample->size;
+    int targetNext = previous * 1.10 + 10;
+
+    // Round down to a milestone figure if possible.
+    int roundUnit = 5;
+    int nextMultiplier = 2;
+    int next = targetNext;
+    while (true) {
+      int prospect = (targetNext / roundUnit) * roundUnit;
+      if (prospect > previous)
+        next = prospect;
+      else
+        break;
+      roundUnit *= nextMultiplier;
+      if (nextMultiplier == 2)
+        nextMultiplier = 5;
+      else
+        nextMultiplier = 2;
+    }
+    
     Sample *sample =
-        doSample((size_t) (smallestMostRecentSample->size * 1.05 + 10),
+        doSample((size_t) (next),
             smallestMostRecentSample->methodNumber,
             methods[smallestMostRecentSample->methodNumber],
             methodNames[smallestMostRecentSample->methodNumber]);
