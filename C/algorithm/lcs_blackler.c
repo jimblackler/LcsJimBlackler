@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -201,7 +200,7 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
       // or a sequence is encountered that can be replaced by one with a smaller
       // index (in the secondary string) by extending the base sequence.
       while (sequenceLength < longestSequence &&
-          secondaryIndex > sequences[sequenceLength]->secondaryIndex) {
+          secondaryIndex >= sequences[sequenceLength]->secondaryIndex) {
         baseSequence = sequences[sequenceLength];
         sequenceLength++;
       }
