@@ -42,7 +42,7 @@ char *LCS_RogerZhang(const char *s, const char *t)
    a[0] = (int*)calloc((n + 1) * (m + 1), sizeof(int));
 
    for (i = a[0][0] = 0; i <= n; i++) { /* find the length */
-      if (!i || (a[i] = a[i - 1] + m)) {
+      if (!i || (a[i] = a[i - 1] + m + 1)) {
          for (j = 0; j <= m; j++) {
             if (!i || !j) { /* initialize the base row/column */
                a[i][j] = 0;
