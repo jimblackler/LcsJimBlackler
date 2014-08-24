@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 /**
 * Longest Common Subsequence algorithm designed and written by Jim Blackler
@@ -181,14 +182,27 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
       }
     }
 
+    // Find the first appearance of the character in the secondary string.
+    unsigned char chr = primary[primaryIndex];
+    int secondaryIndex = characterMap[chr];
+
     // Begin this scan at the shortest sequence that could potentially be
     // extended to exceed the longest sequence.
     sequenceLength = minimumSequence;
-    if (sequenceLength == 0)
+    if (sequenceLength == 0) {
       baseSequence = NULL;
-    else
+    } else {
       baseSequence = sequences[sequenceLength - 1];
+      // Pre-scan to the first viable appearance of the character in the
+      // secondary string.
 
+      while (secondaryIndex != -1 &&
+          secondaryIndex <= baseSequence->secondaryIndex) {
+        secondaryIndex = linkedChars[secondaryIndex];
+      }
+      // Update the first apeparance character map.
+      characterMap[chr] = secondaryIndex;
+    }
     // Keep track of any sequences replaced in the table by extension. These are
     // marked for recycling as soon as it is known they will not themselves be
     // extended on the next iteration.
@@ -196,8 +210,6 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
 
     // Pass over all characters in the secondary string that match the character
     // under consideration in the primary string.
-    unsigned char chr = primary[primaryIndex];
-    int secondaryIndex = characterMap[chr];
     // -1 is used to indicate the end of the list.
     while (secondaryIndex != -1) {
       // Step up through the sequence lengths until a record length is reached,
