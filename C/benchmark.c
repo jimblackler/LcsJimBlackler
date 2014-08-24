@@ -178,7 +178,7 @@ void benchmark() {
         doSample((size_t) (next),
             smallestMostRecentSample->methodNumber,
             methods[smallestMostRecentSample->methodNumber],
-            methodNames[smallestMostRecentSample->methodNumber]);
+            methodNames[smallestMostRecentSample->methodNumber], units);
 
     // Link the new sample to the previous.
     smallestMostRecentSample->next = sample;
