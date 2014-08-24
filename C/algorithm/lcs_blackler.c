@@ -128,7 +128,7 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
   // Slots recycled (available for reuse) are stored in a singly-linked list.
   Node *lastRecycledNode = NULL;
 
-  // Where sequences could not possibly extend to beat the longest known
+  // Where sequences could not possibly be extended to beat the longest known
   // sequence (because there are not enough characters left to scan) they are
   // deemed 'hopeless'; returned to the pool and no longer considered for
   // extension.
