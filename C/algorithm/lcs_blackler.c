@@ -171,7 +171,7 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
     // shorter sequences need no longer be considered as they cannot possibly be
     // extended to become the longest sequence.
     if (remainingCharacters < longestSequence) {
-      if (longestSequence - remainingCharacters > minimumSequence)
+      if (minimumSequence < longestSequence - remainingCharacters)
         minimumSequence = longestSequence - remainingCharacters;
       // Mark the nodes from the 'hopeless' sequences for recycling. We start
       // one sequence before the baseSequence because this is still required.
@@ -256,7 +256,7 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
         sequences[sequenceLength] = newNode;
 
         // If this sequence cannot possibly be reduced again, update the length
-        // of the minimum sequence to consider.
+        // of the minimum sequence under consideration.
         if (secondaryIndex == sequenceLength &&
             minimumSequence < secondaryIndex + 1)
           minimumSequence = secondaryIndex + 1;
