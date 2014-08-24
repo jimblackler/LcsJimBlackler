@@ -134,6 +134,8 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
   // extension.
   int longestHopelessSequence = -1;
 
+  // The first sequence that could possibly be extended.
+  int minimumSequence = 0;
   int longestSequence = 0;  // The longest known sequence.
 
   // The outer loop considers characters from the primary string in order. If
@@ -169,21 +171,23 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
     // shorter sequences need no longer be considered as they cannot possibly be
     // extended to become the longest sequence.
     if (remainingCharacters < longestSequence) {
-      // Begin this scan at the shortest sequence that could potentially be
-      // extended to exceed the longest sequence.
-      sequenceLength = longestSequence - remainingCharacters;
-      baseSequence = sequences[sequenceLength - 1];
+      if (longestSequence - remainingCharacters > minimumSequence)
+        minimumSequence = longestSequence - remainingCharacters;
       // Mark the nodes from the 'hopeless' sequences for recycling. We start
       // one sequence before the baseSequence because this is still required.
-      while (longestHopelessSequence < sequenceLength - 1 - 1) {
+      while (longestHopelessSequence < minimumSequence - 1 - 1) {
         longestHopelessSequence++;
         recycleSequence(sequences[longestHopelessSequence], &lastRecycledNode);
       }
-    } else {
-      // Begin the scan for sequences of length one.
-      sequenceLength = 0;
-      baseSequence = NULL;
     }
+
+    // Begin this scan at the shortest sequence that could potentially be
+    // extended to exceed the longest sequence.
+    sequenceLength = minimumSequence;
+    if (sequenceLength == 0)
+      baseSequence = NULL;
+    else
+      baseSequence = sequences[sequenceLength - 1];
 
     // Keep track of any sequences replaced in the table by extension. These are
     // marked for recycling as soon as it is known they will not themselves be
@@ -250,6 +254,12 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
         // The table is finally updated with a pointer to the leaf of the new
         // subsequence.
         sequences[sequenceLength] = newNode;
+
+        // If this sequence cannot possibly be reduced again, update the length
+        // of the minimum sequence to consider.
+        if (secondaryIndex == sequenceLength &&
+            minimumSequence < secondaryIndex + 1)
+          minimumSequence = secondaryIndex + 1;
 
         if (sequenceLength == longestSequence) {
           // We have created a record-length sequence. It won't be possible to
