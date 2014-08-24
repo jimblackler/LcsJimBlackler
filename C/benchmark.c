@@ -70,13 +70,20 @@ static Sample *doSample(size_t size,
 #endif  // MEMORY_PROFILE
 
   // Record the timing/memory data.
-  sample->measure = after - before;
   // Check the result was valid.
-  sample->valid = isSubstring(result, a) && isSubstring(result, b);
-  sample->strlen = strlen(result);  // Record the length of the result.
+  if (result) {
+    sample->measure = after - before;
+    sample->valid = isSubstring(result, a) && isSubstring(result, b);
+    sample->strlen = strlen(result);  // Record the length of the result.
+    free(result);  // Free the memory.
+  } else {
+    sample->measure = 0;
+    sample->valid = 0;
+    sample->strlen = 0;
+  }
+
   free(a);
   free(b);
-  free(result);  // Free the memory.
 
   // Log to the console.
   if (!sample->valid)
