@@ -148,16 +148,18 @@ void benchmark() {
     int previous = smallestMostRecentSample->size;
     int targetNext = previous * 1.10 + 10;
 
-    // Round down to a milestone figure if possible.
-    int roundUnit = 5;
+    // Round down to the largest-rounded milestone figure that won't take the
+    // figure below the previous result.
+    int roundUnit = 5;  // Lowest milestone rounding is 5.
     int nextMultiplier = 2;
     int next = targetNext;
     while (true) {
-      int prospect = (targetNext / roundUnit) * roundUnit;
-      if (prospect > previous)
-        next = prospect;
+      int prospect = (targetNext / roundUnit) * roundUnit;  // Round down.
+      if (prospect > previous)  // Not less than previous figure?
+        next = prospect;  // Store as potential result.
       else
-        break;
+        break;  // Break out and use the last potential result.
+      // Units go 5, 10, 50, 100, 500... etc.
       roundUnit *= nextMultiplier;
       if (nextMultiplier == 2)
         nextMultiplier = 5;
@@ -224,10 +226,10 @@ void benchmark() {
       if (sample && sample->size == smallest->size) {
         // Write the results cell (including error cases if results were invalid
         // or sub-optimal).
-        if (!sample->valid)
+        if (!sample->valid)  // Test failed, not a subsequence.
           fprintf(outFile, "NOT SS");
         else if (sample->strlen < bestLCS)
-          fprintf(outFile, "NOT LCS");
+          fprintf(outFile, "NOT LCS");  // A better valid alternative is known.
         else fprintf(outFile, "%f", (float) sample->measure / units);
       }
     }
