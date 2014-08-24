@@ -3,6 +3,8 @@
 bool isSubstring(const char *candidateSubstring, const char *largerString) {
   // Iterate over both strings in parallel.
   const char *a = candidateSubstring;
+  if (!*a)
+    return true;  // Empty substring.
   const char *b = largerString;
   while (*b) {
     if (*a == *b)  // Match found, move to the next candidate substring char.
