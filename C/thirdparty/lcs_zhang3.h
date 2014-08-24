@@ -1,0 +1,1 @@
+char *LCS_Zhang3(const char *s, const char *t);
