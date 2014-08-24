@@ -119,8 +119,8 @@ void benchmark() {
   for (int methodNumber = 0; methodNumber != numberMethods;
        methodNumber++) {
     // First sample is one single byte.
-    Sample *sample = doSample(1, methodNumber, methods[methodNumber],
-        methodNames[methodNumber]);
+    Sample *sample = doSample(0, methodNumber, methods[methodNumber],
+        methodNames[methodNumber], units);
 
     // Record the data.
     firstSample[methodNumber] = sample;
