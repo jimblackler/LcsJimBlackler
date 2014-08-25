@@ -3,7 +3,7 @@
 #undef calloc
 #include <stdlib.h>
 
-int memoryCount = 0;
+long long memoryCount = 0;
 
 void *profileMalloc(size_t size) {
   memoryCount += size;

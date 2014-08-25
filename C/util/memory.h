@@ -6,4 +6,4 @@
 extern void *profileMalloc(size_t size);
 extern void *profileCalloc(size_t num_items, size_t size);
 
-extern int memoryCount;
+extern long long memoryCount;
