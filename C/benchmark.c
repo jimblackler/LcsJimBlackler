@@ -133,7 +133,7 @@ void benchmark() {
   // dominate the testing time.
   while (true) {
 
-    // Find the method with the fastest/smallest most recent sample.
+    // Find the method with the fastest/smallest most recent valid sample.
     // O(n^2) time but has negligible impact on program running time.
     Sample *smallestMostRecentSample = NULL;
     for (int methodNumber = 0; methodNumber != numberMethods; methodNumber++) {
