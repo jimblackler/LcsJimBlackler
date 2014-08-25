@@ -142,7 +142,8 @@ void benchmark() {
       while (sample->next)
         sample = sample->next;
       if (!smallestMostRecentSample ||
-          sample->measure < smallestMostRecentSample->measure) {
+          (sample->measure < smallestMostRecentSample->measure &&
+          sample->valid)) {
         smallestMostRecentSample = sample;
       }
     }
