@@ -24,7 +24,9 @@ header section is preserved.
 Created on 2005-01-22 by
 Roger Zhang (rogerz@cs.dal.ca)
 
-Slightly to make the parameters const and make the method name package unique.
+Modified to make the parameters const and make the method name package unique,
+add error handling, corrected a bug and use a single memory allocation rather
+than two.
 
 
 lcs_hirschberg.c, .h
