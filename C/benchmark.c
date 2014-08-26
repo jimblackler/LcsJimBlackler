@@ -154,7 +154,7 @@ void benchmark() {
 
     // Make a new sample with a size of a percentage increase from the previous.
     int previous = smallestMostRecentSample->size;
-    int targetNext = previous * 1.10 + 10;
+    int targetNext = previous * growthMultiply + growthAdd;
 
     // Round down to the largest-rounded milestone figure that won't take the
     // figure below the previous result.
