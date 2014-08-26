@@ -40,7 +40,7 @@ static char *randomString(size_t size) {
 // Perform a sample of the specified |size|, and specified method specs.
 static Sample *doSample(size_t size,
     int methodNumber, char *(*method)(char const *, char const *),
-    const char *methodName) {
+    const char *methodName, int units) {
   // The input is seeded to ensure consistent data across the methods.
   srand(size);
   // Generate the two input strings.
