@@ -193,9 +193,9 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
       baseSequence = NULL;
     } else {
       baseSequence = sequences[sequenceLength - 1];
+
       // Pre-scan to the first viable appearance of the character in the
       // secondary string.
-
       while (secondaryIndex != -1 &&
           secondaryIndex <= baseSequence->secondaryIndex) {
         secondaryIndex = linkedChars[secondaryIndex];
