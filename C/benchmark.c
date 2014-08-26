@@ -98,8 +98,8 @@ static Sample *doSample(size_t size,
 void benchmark() {
 
 #ifdef MEMORY_PROFILE
-  int units = 1;
-  int maxMeasure = 1024 * 1024 * 5;
+  int units = 1024 * 1024;
+  int maxMeasure = units * 200;
 #else
   int units = 1000000;
   int maxMeasure = units * 5;
