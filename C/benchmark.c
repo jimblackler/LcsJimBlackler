@@ -104,6 +104,8 @@ void benchmark() {
   int units = 1000000;
   int maxMeasure = units * 5;
 #endif  // MEMORY_PROFILE
+  double growthMultiply = 1.18;
+  int growthAdd = 1;
 
   // Data about the methods and names.
   size_t numberMethods = 5;
