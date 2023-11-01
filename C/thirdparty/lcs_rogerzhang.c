@@ -29,13 +29,14 @@
 #include <string.h>
 #include <stdlib.h>
 
-char *LCS_RogerZhang(const char *s, const char *t)
+char *LCS_RogerZhang(const char *s, const char *t, size_t n, size_t m, size_t *lcs)
 {
    char *result;
-   int n = strlen(s), m = strlen(t), i, j, **a;
+   int i, j, **a;
 
    if (!n || !m) { /* empty input string */
-      return calloc(sizeof(char), 1);
+     *lcs = 0;
+     return calloc(sizeof(char), 1);
    }
 
    a = (int**)calloc(n + 1, sizeof(int*));
@@ -60,10 +61,12 @@ char *LCS_RogerZhang(const char *s, const char *t)
    if (!(i = a[n][m])) {
      free(a[0]);
      free(a);
+     *lcs = 0;
      return calloc(sizeof(char), 1); /* no common sub-sequence */
    }
 
-   if (!(result = (char*)malloc(i + 1)) || (result[i] = '\0')) {
+   *lcs = i;
+   if (!(result = (char*)malloc(i)) || (result[i] = '\0')) {
       abort(); /* memory allocation failed */
    }
 

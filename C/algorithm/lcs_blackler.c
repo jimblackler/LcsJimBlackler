@@ -68,17 +68,18 @@ static void recycleSequence(Node *node, Node **lastRecycledNode) {
 }
 
 // Return the Longest Common Subsequence of the two supplied strings.
-char *LCS_Blackler(const char *primary, const char *secondary) {
-  size_t primaryLength = strlen(primary);
-  size_t secondaryLength = strlen(secondary);
+char *LCS_Blackler(const char *primary, const char *secondary,
+                   size_t primaryLength, size_t secondaryLength, size_t *lcs) {
 
   // A maximum possible length of a common subsequence is identified.
   size_t upperLimit = primaryLength < secondaryLength ?
       primaryLength : secondaryLength;
 
-  if (!upperLimit)
+  if (!upperLimit) {
+    *lcs = 0;
     return calloc(1, sizeof(char));  // Early out if either string is empty.
-
+  }
+  
   // An array is used to form a series of singly-linked lists which connect
   // appearances of characters in the secondary string. This effectively forms a
   // map between characters and an ordered list of character appearance indices,
@@ -303,6 +304,7 @@ char *LCS_Blackler(const char *primary, const char *secondary) {
   // As the sequence is represented by a leaf node in a tree representing the
   // final character, the string is built back-to-front.
   char *writePointer = result + longestSequence;
+  *lcs = longestSequence;
   *writePointer-- = 0;  // Write the null terminator.
   while (writePointer >= result) {
     // Copy the character from the secondary string.

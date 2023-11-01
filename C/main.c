@@ -15,18 +15,17 @@
 #include "util/loadfile.h"
 #include "util/timing.h"
 #include "benchmark.h"
+#include "benchmark_files.h"
 
-static size_t process(char *name, char *(*function)(const char *, const char *),
-    const char *a, const char *b) {
+static size_t process(char *name, char *(*function)(const char *, const char *, size_t, size_t, size_t *),
+    const char *a, const char *b,  size_t sizeA, size_t sizeB) {
+  size_t length;
   long long before = getMicroseconds();
-  char *lcs = function(a, b);
+  char *lcs = function(a, b, sizeA, sizeB, &length);
   long long after = getMicroseconds();
-  if (strlen(lcs) < 200)
-    printf("%s\n", lcs);
-  printf("%s: %lld, %lu\n", name, after - before, strlen(lcs));
-  size_t result = strlen(lcs);
+  printf("%s: %lld, %lu\n", name, after - before, sizeA);
   free(lcs);
-  return result;
+  return length;
 }
 
 static char *randomString(int range, size_t size) {
@@ -40,19 +39,21 @@ static char *randomString(int range, size_t size) {
   return text;
 }
 
-static void testAll(const char *a, const char *b) {
-  size_t result2 = process("Blackler", LCS_Blackler, a, b);
-  size_t result = process("NeilJones", LCS_NeilJones, a, b);
+static void testAll(const char *a, const char *b, size_t sizeA, size_t sizeB) {
+  size_t result2 = process("Blackler", LCS_Blackler, a, b, sizeA, sizeB);
+  size_t result = process("NeilJones", LCS_NeilJones, a, b, sizeA, sizeB);
   assert(result == result2);
-  size_t result3 = process("SoarPenguin", LCS_SoarPenguin, a, b);
+  size_t result3 = process("SoarPenguin", LCS_SoarPenguin, a, b, sizeA, sizeB);
   assert(result == result3);
   printf("\n");
 }
 
 static void fileTest() {
-  char *a = loadFile("data/bible1.txt");
-  char *b = loadFile("data/bible2.txt");
-  testAll(a, b);
+  size_t sizeA;
+  char *a = loadFile("data/bible1.txt", &sizeA);
+  size_t sizeB;
+  char *b = loadFile("data/bible2.txt", &sizeB);
+  testAll(a, b, sizeA, sizeB);
   free(a);
   free(b);
 }
@@ -60,28 +61,32 @@ static void fileTest() {
 static void phraseTest() {
   char *a = "The earth was without form, and void; and darkness was on the face of the deep. And the Spirit of God was hovering over the face of the waters.";
   char *b = "Now the earth was formless and empty, darkness was over the surface of the deep, and the Spirit of God was hovering over the waters.";
-  testAll(a, b);
+  testAll(a, b, strlen(a), strlen(b));
 }
 
 static void randomTest() {
   srand(1);
   int count;
   for (count = 0; count != 5; count++) {
-    char *a = randomString(rand() % 96 + 1, (size_t) (rand() % 35000 + 1));
-    char *b = randomString(rand() % 96 + 1, (size_t) (rand() % 35000 + 1));
-    testAll(a, b);
+    size_t sizeA = (size_t) (rand() % 35000 + 1);
+    char *a = randomString(rand() % 96 + 1, sizeA);
+    size_t sizeB = (size_t) (rand() % 35000 + 1);
+    char *b = randomString(rand() % 96 + 1, sizeB);
+    testAll(a, b, sizeA, sizeB);
     free(a);
     free(b);
   }
 }
 
 int main(int argc, const char *argv[]) {
-  if (1) {
+  if (0) {
     benchmark();
-  } else {
+  } else if (0) {
     phraseTest();
     fileTest();
     randomTest();
+  } else {
+    benchmarkFiles();
   }
 #ifdef WIN32
   _CrtDumpMemoryLeaks();

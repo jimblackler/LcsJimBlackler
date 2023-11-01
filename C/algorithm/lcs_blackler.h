@@ -48,4 +48,5 @@
 */
 
 // Return the Longest Common Subsequence of the two supplied strings.
-extern char *LCS_Blackler(const char *primary, const char *secondary);
+extern char *LCS_Blackler(const char *primary, const char *secondary,
+                          size_t primaryLength, size_t secondaryLength, size_t *lcs);

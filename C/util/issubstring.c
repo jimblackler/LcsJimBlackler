@@ -1,16 +1,17 @@
 #include <stdbool.h>
+#include <stddef.h>
 
-bool isSubstring(const char *candidateSubstring, const char *largerString) {
+bool isSubstring(const char *a0, const char *b0, size_t sizeA, size_t sizeB) {
   // Iterate over both strings in parallel.
-  const char *a = candidateSubstring;
-  if (!*a)
+  const char *a = a0;
+  if (a == a0 + sizeA)
     return true;  // Empty substring.
-  const char *b = largerString;
-  while (*b) {
-    if (*a == *b)  // Match found, move to the next candidate substring char.
+  const char *b = b0;
+  while (b < b0 + sizeB) {
+    if (*a == *b)
       a++;
-    if (!*a)
-      return true;  // Reached the end of the candidate substring.
+    if (a == a0 + sizeA)
+      return true;
     b++;
   }
   // Reached the end of the larger string without passing all of the characters

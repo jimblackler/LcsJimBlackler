@@ -20,7 +20,7 @@ struct LCS {
 static struct LCS *lcs = NULL;
 
 int
-initLCS(const char *X, const char *Y)
+initLCS(const char *X, const char *Y, int n, int m)
 {
   int i, j;
 
@@ -32,8 +32,8 @@ initLCS(const char *X, const char *Y)
   if(NULL == lcs)
     return -1;
 
-  lcs->m = strlen(X);
-  lcs->n = strlen(Y);
+  lcs->m = m;
+  lcs->n = n;
   lcs->x = X;
   lcs->y = Y;
 
@@ -66,7 +66,7 @@ initLCS(const char *X, const char *Y)
   return 1;
 }
 
-static void
+static size_t
 LCSDP()
 {
   int i, j, p;
@@ -90,8 +90,9 @@ LCSDP()
   j = lcs->n;
   p = lcs->c[i][j];
 
-  lcs->z = (char *)malloc(sizeof(char) * (p + 1));
-  lcs->z[p--] = '\0';
+  lcs->z = (char *)malloc(sizeof(char) * p);
+  size_t size = p;
+  p--; //lcs->z[p--] = '\0';
   while(i > 0 || j > 0) {
     if(lcs->b[i][j] == LCS_UP_LEFT) {
       i--; j--;
@@ -102,6 +103,7 @@ LCSDP()
       j--;
     }
   }
+  return size;
 }
 
 void
@@ -124,10 +126,10 @@ destroyLCS()
 }
 
 char*
-LCS_SoarPenguin(const char *X, const char *Y)
+LCS_SoarPenguin(const char *X, const char *Y, size_t n, size_t m, size_t *size)
 {
-  initLCS(X, Y);
-  LCSDP();
+  initLCS(X, Y, m, n);
+  *size = LCSDP();
   char* result = lcs->z;
   destroyLCS();
   return result;

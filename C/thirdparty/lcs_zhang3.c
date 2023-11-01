@@ -32,18 +32,17 @@
 
 #define a(i, j) mem[(i) * (m + 1) + (j)]
 
-char *LCS_Zhang3(const char *s, const char *t) {
-
-  size_t n = strlen(s);
-  size_t m = strlen(t);
+char *LCS_Zhang3(const char *s, const char *t, size_t n, size_t m, size_t *length) {
 
   // Size required will overflow size_t?
   if (m + 1 > SIZE_MAX / (n + 1))
     return NULL;
 
   int *mem = calloc((n + 1) * (m + 1), sizeof(int));
-  if (!mem)
+  if (!mem) {
+    *length = 0;
     return NULL;
+  }
 
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < m; j++) {
@@ -61,15 +60,14 @@ char *LCS_Zhang3(const char *s, const char *t) {
   }
 
   int lcs = a(n, m);
-
-  char *result = malloc(lcs + 1);
+  *length = lcs;
+  char *result = malloc(lcs);
   if (!result) {
     free(mem);
     return NULL;
   }
 
   char *write = result + lcs;
-  *write = 0;
 
   int n2 = n;
   int m2 = m;

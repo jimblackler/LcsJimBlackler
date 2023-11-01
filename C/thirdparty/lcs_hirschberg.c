@@ -59,20 +59,22 @@ char *reverseString(char const *a, size_t n) {
   return c;
 }
 
-char *algC(size_t m, size_t n, const char *a, const char *b) {
+char *algC(size_t m, size_t n, const char *a, const char *b, size_t *length) {
 
   // Step 1
   if (n == 0) {
+    *length = 0;
     return calloc(sizeof(char), 1);
   } else if (m == 1) {
     for (int j = 0; j < n; j++) {
       if (a[0] == b[j]) {
-        char *c = malloc(sizeof(char) * 2);
+        *length = 1;
+        char *c = malloc(sizeof(char));
         c[0] = a[0];
-        c[1] = 0;
         return c;
       }
     }
+    *length = 0;
     return calloc(sizeof(char), 1);
     // Step 2
   } else {
@@ -88,13 +90,17 @@ char *algC(size_t m, size_t n, const char *a, const char *b) {
     int k = findK(l1, l2, n);
 
     // Step 5
-    char *c1 = algC(i, k, a, b);
-    char *c2 = algC(m - i, n - k, a + i, b + k);
-
-    char *c = malloc((strlen(c1) + strlen(c2) + 1) * sizeof(char));
-    strcpy(c, c1);
-    strcat(c, c2);
+    size_t c1l;
+    char *c1 = algC(i, k, a, b, &c1l);
     
+    size_t c2l;
+    char *c2 = algC(m - i, n - k, a + i, b + k, &c2l);
+
+    char *c = malloc((c1l + c2l) * sizeof(char));
+    memcpy(c, c1, c1l);
+    memcpy(c + c1l, c2, c2l);
+    *length = c1l + c2l;
+
     free(c1);
     free(c2);
     free(rev_a);
@@ -106,8 +112,6 @@ char *algC(size_t m, size_t n, const char *a, const char *b) {
   }
 }
 
-char *LCS_Hirschberg(const char *a, const char *b) {
-  size_t m = strlen(a);
-  size_t n = strlen(b);
-  return algC(m, n, a, b);
+char *LCS_Hirschberg(const char *a, const char *b, size_t m, size_t n, size_t *lcs) {
+  return algC(m, n, a, b, lcs);
 }

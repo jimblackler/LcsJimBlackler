@@ -2,5 +2,4 @@
 
 // Returns true if the |candidateSubstring| is complete substring of the
 // |largerString|.
-extern bool isSubstring(const char *candidateSubstring,
-    const char *largerString);
+extern bool isSubstring(const char *a0, const char *b0, size_t sizeA, size_t sizeB);

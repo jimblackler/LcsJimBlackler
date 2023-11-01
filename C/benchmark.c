@@ -4,12 +4,55 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#import <math.h>
+
 
 #include "algorithm/lcs_blackler.h"
+#include "algorithm/lcs_blackler2.h"
+#include "algorithm/lcs_blackler3.h"
+#include "algorithm/lcs_blackler4.h"
+#include "algorithm/lcs_blackler5.h"
+#include "algorithm/lcs_blackler6.h"
+#include "algorithm/lcs_blackler7.h"
+#include "algorithm/lcs_blackler8.h"
+#include "algorithm/lcs_blackler9.h"
+#include "algorithm/lcs_blackler10.h"
+#include "algorithm/lcs_blackler11.h"
+#include "algorithm/lcs_blackler12.h"
+#include "algorithm/lcs_blackler13.h"
+#include "algorithm/lcs_blackler14.h"
+#include "algorithm/lcs_blackler15.h"
+#include "algorithm/lcs_blackler16.h"
+#include "algorithm/lcs_blackler17.h"
+#include "algorithm/lcs_blackler18.h"
+#include "algorithm/lcs_blackler19.h"
+#include "algorithm/lcs_blackler20.h"
+#include "algorithm/lcs_blackler21.h"
+#include "algorithm/lcs_blackler22.h"
+#include "algorithm/lcs_blackler23.h"
+#include "algorithm/lcs_blackler24.h"
+#include "algorithm/lcs_blackler25.h"
+#include "algorithm/lcs_blackler26.h"
+#include "algorithm/lcs_blackler27.h"
+#include "algorithm/lcs_blackler28.h"
+#include "algorithm/lcs_blackler29.h"
+#include "algorithm/lcs_blackler30.h"
+#include "algorithm/lcs_blackler31.h"
+#include "algorithm/lcs_blackler32.h"
+#include "algorithm/lcs_blackler33.h"
+#include "algorithm/lcs_blackler34.h"
+#include "algorithm/lcs_blackler35.h"
+#include "algorithm/lcs_blackler36.h"
+#include "algorithm/lcs_blackler37.h"
+#include "algorithm/lcs_blackler38.h"
+#include "algorithm/lcs_blackler39.h"
+#include "algorithm/lcs_blackler40.h"
 #include "thirdparty/lcs_hirschberg.h"
 #include "thirdparty/lcs_neiljones.h"
 #include "thirdparty/lcs_rogerzhang.h"
 #include "thirdparty/lcs_soarpenguin.h"
+#include "thirdparty/lcs_zhang2.h"
+#include "thirdparty/lcs_zhang3.h"
 #include "util/issubstring.h"
 #include "util/timing.h"
 
@@ -30,7 +73,9 @@ static char *randomString(size_t size) {
   char *text = malloc(size + 1);
   char *ptr = text;
   while (size) {
-    *ptr++ = (char) (' ' + rand() % (256 - ' '));
+    double r = pow((float)rand() / RAND_MAX, 25);
+    int x = r * (256 - ' '); //1.2; // 100
+    *ptr++ = (char) (' ' + x);
     size--;
   }
   *ptr = 0;
@@ -39,7 +84,7 @@ static char *randomString(size_t size) {
 
 // Perform a sample of the specified |size|, and specified method specs.
 static Sample *doSample(size_t size,
-    int methodNumber, char *(*method)(char const *, char const *),
+    int methodNumber, char *(*method)(char const *, char const *, size_t, size_t, size_t *),
     const char *methodName, int units) {
   // The input is seeded to ensure consistent data across the methods.
   srand(size);
@@ -61,7 +106,8 @@ static Sample *doSample(size_t size,
   long long before = getMicroseconds();  // Get time before.
 #endif  // MEMORY_PROFILE
 
-  char *result = method(a, b);  // Perform the method.
+  size_t lcsSize;
+  char *result = method(a, b, size, size, &lcsSize);  // Perform the method.
 
 #ifdef MEMORY_PROFILE
   long long after = memoryCount;  // Get memory afterwards.
@@ -73,8 +119,8 @@ static Sample *doSample(size_t size,
   // Check the result was valid.
   if (result) {
     sample->measure = after - before;
-    sample->valid = isSubstring(result, a) && isSubstring(result, b);
-    sample->strlen = strlen(result);  // Record the length of the result.
+    sample->valid = isSubstring(result, a, lcsSize, size) && isSubstring(result, b, lcsSize, size);
+    sample->strlen = lcsSize;
     free(result);  // Free the memory.
   } else {
     sample->measure = 0;
@@ -88,7 +134,7 @@ static Sample *doSample(size_t size,
   // Log to the console.
   if (!sample->valid)
     printf("*INVALID* ");
-  printf("%lld\n", sample->measure);
+  printf("%f  [%lu]\n", (float) sample->measure / units, sample->strlen);
 
   return sample;
 }
@@ -97,22 +143,44 @@ static Sample *doSample(size_t size,
 // and output the results to a CSV file.
 void benchmark() {
 
+
 #ifdef MEMORY_PROFILE
   int units = 1024 * 1024;
-  int maxMeasure = units * 200;
+  int maxMeasure = units * 50;
 #else
   int units = 1000000;
-  int maxMeasure = units * 5;
+  int maxMeasure = units * 6;
 #endif  // MEMORY_PROFILE
-  double growthMultiply = 1.18;
-  int growthAdd = 1;
+  int startSample = 1000;
+  double growthMultiply = 1.12;
+  int growthAdd = 1000;
 
   // Data about the methods and names.
-  size_t numberMethods = 5;
-  const char *methodNames[] =
-      {"Blackler", "NeilJones", "SoarPenguin", "RogerZhang", "Hirschberg"};
-  char *(*methods[])(const char *, const char *) =
-      {LCS_Blackler, LCS_NeilJones, LCS_SoarPenguin, LCS_RogerZhang, LCS_Hirschberg};
+  size_t numberMethods = 11;
+  const char *methodNames[] = {  "Blackler40", "Blackler39", "Blackler38", "Blackler37", "Blackler36", "Blackler35", "Blackler34", "Blackler29", "Blackler33", "Blackler32",  "Blackler31", "Blackler30", "Blackler25",  "Blackler28", "Blackler27",
+    "Blackler26", "Blackler20", "Blackler18", "Blackler24",
+    "Blackler23", "Blackler17", "Blackler22", "Blackler21",  "Blackler5",
+    "Blackler2", "Blackler3", "Blackler13", "Blackler19",
+    "Blackler4","Blackler6", "Blackler7", "Blackler8", "Blackler9",
+    "Blackler10", "Blackler11", "Blackler12", "Blackler14", "Blackler15",
+    "Blackler16", "Blackler", "Zhang3",  "NeilJones", "SoarPenguin",
+    "RogerZhang", "Hirschberg"};
+  char *(*methods[])(const char *, const char *, size_t, size_t, size_t *) = {LCS_Blackler40,
+    LCS_Blackler39, LCS_Blackler38, LCS_Blackler37, LCS_Blackler36, LCS_Blackler35, LCS_Blackler34,
+    LCS_Blackler29, LCS_Blackler33, LCS_Blackler32, LCS_Blackler31, LCS_Blackler30,
+    LCS_Blackler25, LCS_Blackler28, LCS_Blackler27, LCS_Blackler26, LCS_Blackler20,
+    LCS_Blackler18,  LCS_Blackler24,
+    LCS_Blackler23, LCS_Blackler17, LCS_Blackler22, LCS_Blackler21, LCS_Blackler5,
+    LCS_Blackler2, LCS_Blackler3, LCS_Blackler13, LCS_Blackler19,
+    LCS_Blackler4, LCS_Blackler6, LCS_Blackler7, LCS_Blackler8, LCS_Blackler9,
+    LCS_Blackler10, LCS_Blackler11, LCS_Blackler12, LCS_Blackler14, LCS_Blackler15,
+    LCS_Blackler16, LCS_Blackler,  LCS_Zhang3, LCS_NeilJones, LCS_SoarPenguin, LCS_RogerZhang,
+    LCS_Hirschberg};
+
+  //  size_t numberMethods = 1;
+  //  const char *methodNames[] = {"Blackler9"};
+  //  char *(*methods[])(const char *, const char *) = {LCS_Blackler9};
+
 
   // Tables of first samples for each method.
   Sample **firstSample = calloc(sizeof(Sample *), numberMethods);
@@ -121,8 +189,8 @@ void benchmark() {
   for (int methodNumber = 0; methodNumber != numberMethods;
        methodNumber++) {
     // First sample is one single byte.
-    Sample *sample = doSample(0, methodNumber, methods[methodNumber],
-        methodNames[methodNumber], units);
+    Sample *sample = doSample(startSample, methodNumber, methods[methodNumber],
+                              methodNames[methodNumber], units);
 
     // Record the data.
     firstSample[methodNumber] = sample;
@@ -145,9 +213,9 @@ void benchmark() {
         sample = sample->next;
       if (!smallestMostRecentSample ||
           (sample->measure < smallestMostRecentSample->measure &&
-          sample->valid)) {
-        smallestMostRecentSample = sample;
-      }
+           sample->valid)) {
+            smallestMostRecentSample = sample;
+          }
     }
 
     // If the fastest method was over the cap time, stop.
@@ -176,12 +244,12 @@ void benchmark() {
       else
         nextMultiplier = 2;
     }
-    
+
     Sample *sample =
-        doSample((size_t) (next),
-            smallestMostRecentSample->methodNumber,
-            methods[smallestMostRecentSample->methodNumber],
-            methodNames[smallestMostRecentSample->methodNumber], units);
+    doSample((size_t) (next),
+             smallestMostRecentSample->methodNumber,
+             methods[smallestMostRecentSample->methodNumber],
+             methodNames[smallestMostRecentSample->methodNumber], units);
 
     // Link the new sample to the previous.
     smallestMostRecentSample->next = sample;

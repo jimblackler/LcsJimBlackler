@@ -1,1 +1,1 @@
-char *LCS_RogerZhang(const char *s, const char *t);
+extern char * LCS_RogerZhang(const char *s, const char *t, size_t n, size_t m, size_t *lcs);
